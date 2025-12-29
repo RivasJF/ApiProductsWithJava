@@ -2,6 +2,7 @@ package dev.rivasjf.ServicioProductos.service;
 
 import dev.rivasjf.ServicioProductos.dto.ProductoCreateDto;
 import dev.rivasjf.ServicioProductos.dto.ProductoDto;
+import dev.rivasjf.ServicioProductos.dto.ProductoUpdateDto;
 import dev.rivasjf.ServicioProductos.exeption.NotFoundException;
 import dev.rivasjf.ServicioProductos.mapper.mapper;
 import dev.rivasjf.ServicioProductos.model.Producto;
@@ -33,14 +34,11 @@ public class ProductoService implements IProductoService{
     }
 
     @Override
-    public ProductoDto actualizarProducto(UUID id, ProductoDto productoDto) {
+    public ProductoDto actualizarProducto(UUID id, ProductoUpdateDto productoUpdateDto) {
         Producto changeProducto = repo.findById(id)
                 .orElseThrow(() -> new NotFoundException("No se encontro el producto con id " + id));
 
-        changeProducto.setNombre(productoDto.getNombre());
-        changeProducto.setPrecio(productoDto.getPrecio());
-        changeProducto.setCantidad(productoDto.getCantidad());
-
+        productoUpdateDto.applyPatch(changeProducto);
         return mapper.toDto(repo.save(changeProducto));
     }
 

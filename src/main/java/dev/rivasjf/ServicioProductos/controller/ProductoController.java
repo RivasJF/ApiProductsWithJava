@@ -2,6 +2,7 @@ package dev.rivasjf.ServicioProductos.controller;
 
 import dev.rivasjf.ServicioProductos.dto.ProductoCreateDto;
 import dev.rivasjf.ServicioProductos.dto.ProductoDto;
+import dev.rivasjf.ServicioProductos.dto.ProductoUpdateDto;
 import dev.rivasjf.ServicioProductos.service.IProductoService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +31,9 @@ public class ProductoController {
         return ResponseEntity.created(URI.create("/api/productos/"+nuevoProducto.getId())).body(nuevoProducto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ProductoDto> actualizarProducto(@PathVariable("id") UUID id, @RequestBody ProductoDto productoDto) {
-        return ResponseEntity.ok(productoService.actualizarProducto(id, productoDto));
+    @PatchMapping("/{id}")
+    public ResponseEntity<ProductoDto> actualizarParcialProducto(@PathVariable("id") UUID id, @Valid @RequestBody ProductoUpdateDto productoUpdateDto) {
+        return ResponseEntity.ok(productoService.actualizarProducto(id, productoUpdateDto));
     }
 
     @DeleteMapping("/{id}")
