@@ -1,5 +1,6 @@
 package dev.rivasjf.ServicioProductos.mapper;
 
+import dev.rivasjf.ServicioProductos.dto.ProductoCreateDto;
 import dev.rivasjf.ServicioProductos.dto.ProductoDto;
 import dev.rivasjf.ServicioProductos.model.Producto;
 
@@ -15,12 +16,12 @@ public class mapper {
                 .build();
     }
 
-    public static Producto toModel (ProductoDto productoDto) {
-        if (productoDto == null) return null;
+    public static Producto toModel (ProductoCreateDto productoCreateDto) {
+        if (productoCreateDto == null) return null;
         return Producto.builder()
-                .nombre(productoDto.getNombre())
-                .precio(productoDto.getPrecio())
-                .cantidad(productoDto.getCantidad())
+                .nombre(productoCreateDto.getNombre())
+                .precio(productoCreateDto.getPrecio())
+                .cantidad(productoCreateDto.getCantidad())
                 .build();
     }
 }

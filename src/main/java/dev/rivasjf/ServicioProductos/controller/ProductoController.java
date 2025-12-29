@@ -1,7 +1,9 @@
 package dev.rivasjf.ServicioProductos.controller;
 
+import dev.rivasjf.ServicioProductos.dto.ProductoCreateDto;
 import dev.rivasjf.ServicioProductos.dto.ProductoDto;
 import dev.rivasjf.ServicioProductos.service.IProductoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,8 +25,8 @@ public class ProductoController {
     }
 
     @PostMapping()
-    public ResponseEntity<ProductoDto> crearProducto(@RequestBody ProductoDto productoDto) {
-        ProductoDto nuevoProducto = productoService.crearProducto(productoDto);
+    public ResponseEntity<ProductoDto> crearProducto(@Valid @RequestBody ProductoCreateDto productoCreateDto) {
+        ProductoDto nuevoProducto = productoService.crearProducto(productoCreateDto);
         return ResponseEntity.created(URI.create("/api/productos/"+nuevoProducto.getId())).body(nuevoProducto);
     }
 

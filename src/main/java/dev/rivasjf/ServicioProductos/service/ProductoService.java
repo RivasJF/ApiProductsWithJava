@@ -1,5 +1,6 @@
 package dev.rivasjf.ServicioProductos.service;
 
+import dev.rivasjf.ServicioProductos.dto.ProductoCreateDto;
 import dev.rivasjf.ServicioProductos.dto.ProductoDto;
 import dev.rivasjf.ServicioProductos.exeption.NotFoundException;
 import dev.rivasjf.ServicioProductos.mapper.mapper;
@@ -26,8 +27,8 @@ public class ProductoService implements IProductoService{
     }
 
     @Override
-    public ProductoDto crearProducto(ProductoDto productoDto) {
-        Producto nuevoProducto = mapper.toModel(productoDto);
+    public ProductoDto crearProducto(ProductoCreateDto productoCreateDto) {
+        Producto nuevoProducto = mapper.toModel(productoCreateDto);
         return mapper.toDto(repo.save(nuevoProducto));
     }
 
