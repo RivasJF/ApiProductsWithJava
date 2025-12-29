@@ -14,6 +14,7 @@ import tools.jackson.databind.exc.UnrecognizedPropertyException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -49,11 +50,30 @@ public class GlobalExceptionHandler {
             );
         }
         if (ex.getCause() instanceof InvalidFormatException cause) {
-            String field = cause.getPath().get(0).getPropertyName();
-            String message = "El campo "+ field + "tiene un formato invalido";
-            return ResponseEntity.badRequest().body(new ErrorResponse(400,
-                    "El campo '"+ field + "' tiene un formato invalido",
-                    LocalDateTime.now()));
+
+            String fieldPath = cause.getPath().stream()
+                    .map(ref -> ref.getPropertyName() != null
+                            ? ref.getPropertyName()
+                            : "[" + ref.getIndex() + "]")
+                    .collect(Collectors.joining("."));
+
+            String expectedType = cause.getTargetType().getSimpleName();
+            Object rejectedValue = cause.getValue();
+
+            String message = String.format(
+                    "El campo '%s' tiene un valor inválido. Valor recibido: '%s'. Tipo esperado: %s",
+                    fieldPath,
+                    rejectedValue,
+                    expectedType
+            );
+
+            return ResponseEntity.badRequest().body(
+                    new ErrorResponse(
+                            400,
+                            message,
+                            LocalDateTime.now()
+                    )
+            );
         }
         return ResponseEntity.badRequest().body(new ErrorResponse(400,
                 "Invalid request body",
