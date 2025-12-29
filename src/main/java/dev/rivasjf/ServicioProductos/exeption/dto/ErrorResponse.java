@@ -1,16 +1,15 @@
-package dev.rivasjf.ServicioProductos.dto;
+package dev.rivasjf.ServicioProductos.exeption.dto;
 
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ValidationErrorResponse {
+public class ErrorResponse {
     private int status;
-    private Map<String, String> errors;
+    private String message;
     private LocalDateTime timestamp;
 }
