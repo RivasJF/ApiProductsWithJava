@@ -1,16 +1,30 @@
-version: '3.8'
+version: "3.8"
 
 services:
-  mysql-serviceJava:
+  mysql:
     image: mysql:8.0
-    container_name: mysql_container_Java
+    container_name: mysql_container_java
+    restart: always
     environment:
       MYSQL_DATABASE: bd_service
-      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+
+  productos:
+    build: .
+    image: servicio-productos
+    container_name: servicio_productos
+    depends_on:
+      - mysql
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
     restart: always
 
 volumes:
