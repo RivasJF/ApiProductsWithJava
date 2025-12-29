@@ -1,0 +1,53 @@
+package dev.rivasjf.ServicioProductos.service;
+
+import dev.rivasjf.ServicioProductos.dto.ProductoDto;
+import dev.rivasjf.ServicioProductos.exeption.NotFoundException;
+import dev.rivasjf.ServicioProductos.mapper.mapper;
+import dev.rivasjf.ServicioProductos.model.Producto;
+import dev.rivasjf.ServicioProductos.repository.ProductoRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+@Service
+public class ProductoService implements IProductoService{
+
+    private ProductoRepository repo;
+
+    public ProductoService(ProductoRepository repo) { this.repo = repo; }
+
+    @Override
+    public List<ProductoDto> traerProdcutos() {
+        return repo.findAll().stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductoDto crearProducto(ProductoDto productoDto) {
+        Producto nuevoProducto = mapper.toModel(productoDto);
+        return mapper.toDto(repo.save(nuevoProducto));
+    }
+
+    @Override
+    public ProductoDto actualizarProducto(UUID id, ProductoDto productoDto) {
+        Producto changeProducto = repo.findById(id)
+                .orElseThrow(() -> new NotFoundException("No se encontro el producto con id " + id));
+
+        changeProducto.setNombre(productoDto.getNombre());
+        changeProducto.setPrecio(productoDto.getPrecio());
+        changeProducto.setCantidad(productoDto.getCantidad());
+
+        return mapper.toDto(repo.save(changeProducto));
+    }
+
+    @Override
+    public void eliminarProducto(UUID id) {
+        if (!repo.existsById(id)) {
+            throw new NotFoundException("No se encontro el producto con id " + id);
+        }
+        repo.deleteById(id);
+    }
+}
