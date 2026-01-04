@@ -2,11 +2,13 @@ package dev.rivasjf.ServicioProductos.service;
 
 import dev.rivasjf.ServicioProductos.dto.ProductoCreateDto;
 import dev.rivasjf.ServicioProductos.dto.ProductoDto;
+import dev.rivasjf.ServicioProductos.dto.ProductoResponseDto;
 import dev.rivasjf.ServicioProductos.dto.ProductoUpdateDto;
 import dev.rivasjf.ServicioProductos.exeption.NotFoundException;
 import dev.rivasjf.ServicioProductos.mapper.mapper;
 import dev.rivasjf.ServicioProductos.model.Producto;
 import dev.rivasjf.ServicioProductos.repository.ProductoRepository;
+import dev.rivasjf.ServicioProductos.repository.proyection.ProductoSummary;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +27,13 @@ public class ProductoService implements IProductoService{
         return repo.findAll().stream()
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ProductoResponseDto traerProducto(UUID id) {
+        ProductoSummary producto = repo.findUniqueById(id)
+                .orElseThrow(() -> new NotFoundException("No se encontro el producto con id " + id));
+        return mapper.toResponseDto(producto);
     }
 
     @Override

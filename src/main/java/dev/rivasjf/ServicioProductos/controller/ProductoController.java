@@ -2,6 +2,7 @@ package dev.rivasjf.ServicioProductos.controller;
 
 import dev.rivasjf.ServicioProductos.dto.ProductoCreateDto;
 import dev.rivasjf.ServicioProductos.dto.ProductoDto;
+import dev.rivasjf.ServicioProductos.dto.ProductoResponseDto;
 import dev.rivasjf.ServicioProductos.dto.ProductoUpdateDto;
 import dev.rivasjf.ServicioProductos.service.IProductoService;
 import jakarta.validation.Valid;
@@ -23,6 +24,11 @@ public class ProductoController {
     @GetMapping()
     public ResponseEntity<List<ProductoDto>> traerProductos() {
         return ResponseEntity.ok(productoService.traerProdcutos());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ProductoResponseDto> traerProducto(@PathVariable("id") UUID id) {
+        return ResponseEntity.ok(productoService.traerProducto(id));
     }
 
     @PostMapping()
